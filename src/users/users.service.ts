@@ -8,11 +8,11 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectModel(User)
-    private userModel: typeof User
+    private readonly userModel: typeof User
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    return this.userModel.create(createUserDto);
   }
 
   findAll() {
@@ -24,12 +24,19 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    const user = await this.findOne(id);
+
+    await user.update(updateUserDto);
+    await user.save();
+
+    return user;
   }
 
   async remove(id: number) {
     const user = await this.findOne(id);
 
     await user.destroy();
+
+    return id;
   }
 }
