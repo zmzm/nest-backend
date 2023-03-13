@@ -36,8 +36,15 @@ export class RolesController {
   @Get(':id')
   @ApiOperation({ summary: 'Get role by id' })
   @ApiResponse({ status: 200, type: Role })
-  findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+  findOneById(@Param('id') id: string) {
+    return this.rolesService.findOneById(+id);
+  }
+
+  @Get(':type')
+  @ApiOperation({ summary: 'Get role by type' })
+  @ApiResponse({ status: 200, type: Role })
+  findOneByType(@Param('type') type: string) {
+    return this.rolesService.findOneByType(type);
   }
 
   @Patch(':id')

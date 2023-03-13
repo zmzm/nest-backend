@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { Role } from '../roles/entities/role.entity';
+import { RolesService } from '../roles/roles.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -8,15 +10,19 @@ import { User } from './entities/user.entity';
 export class UsersService {
   constructor(
     @InjectModel(User)
-    private readonly userModel: typeof User
+    private readonly userModel: typeof User,
+    private readonly roleService: RolesService
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return this.userModel.create(createUserDto);
+    const user = await this.userModel.create(createUserDto);
+    const role = await this.roleService.findOneByType('USER');
+    await user.$set('roles', [role.id]);
+    return user;
   }
 
   findAll() {
-    return this.userModel.findAll();
+    return this.userModel.findAll({ include: Role });
   }
 
   findOne(id: number) {

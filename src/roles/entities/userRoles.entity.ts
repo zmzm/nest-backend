@@ -8,7 +8,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { Role } from './role.entity';
 
-@Table({ tableName: 'user_roles' })
+@Table({ tableName: 'user_roles', createdAt: false, updatedAt: false })
 export class UserRoles extends Model<UserRoles> {
   @Column({
     type: DataType.INTEGER,
