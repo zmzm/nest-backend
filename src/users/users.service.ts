@@ -26,7 +26,11 @@ export class UsersService {
   }
 
   findOne(id: number) {
-    return this.userModel.findOne({ where: { id } });
+    return this.userModel.findOne({ where: { id }, include: Role });
+  }
+
+  findByEmail(email: string) {
+    return this.userModel.findOne({ where: { email }, include: Role });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

@@ -21,11 +21,11 @@ export class RolesService {
   }
 
   findOneById(id: number) {
-    return this.roleModel.findOne({ where: { id } });
+    return this.roleModel.findOne({ where: { id }, include: User });
   }
 
   findOneByType(type: string) {
-    return this.roleModel.findOne({ where: { type } });
+    return this.roleModel.findOne({ where: { type }, include: User });
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto) {
