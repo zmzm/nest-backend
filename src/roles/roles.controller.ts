@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from './entities/role.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('Roles endpoint')
 @Controller('roles')
@@ -19,6 +21,7 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: [CreateRoleDto] })
   @ApiOperation({ summary: 'Create role' })
   @ApiResponse({ status: 200, type: Role })
@@ -48,6 +51,7 @@ export class RolesController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: [UpdateRoleDto] })
   @ApiOperation({ summary: 'Update role by id' })
   @ApiResponse({ status: 200, type: Role })
@@ -56,6 +60,7 @@ export class RolesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete role by id' })
   @ApiResponse({ status: 200, type: Number })
   remove(@Param('id') id: string) {
