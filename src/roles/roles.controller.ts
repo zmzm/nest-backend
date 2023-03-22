@@ -14,6 +14,8 @@ import { UpdateRoleDto } from './dto/update-role.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from './entities/role.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 @ApiTags('Roles endpoint')
 @Controller('roles')
@@ -21,7 +23,8 @@ export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBody({ type: [CreateRoleDto] })
   @ApiOperation({ summary: 'Create role' })
   @ApiResponse({ status: 200, type: Role })
@@ -30,6 +33,8 @@ export class RolesController {
   }
 
   @Get()
+  @Roles('USER')
+  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get all roles' })
   @ApiResponse({ status: 200, type: [Role] })
   findAll() {
@@ -37,6 +42,8 @@ export class RolesController {
   }
 
   @Get(':id')
+  @Roles('USER')
+  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get role by id' })
   @ApiResponse({ status: 200, type: Role })
   findOneById(@Param('id') id: string) {
@@ -44,6 +51,8 @@ export class RolesController {
   }
 
   @Get(':type')
+  @Roles('USER')
+  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get role by type' })
   @ApiResponse({ status: 200, type: Role })
   findOneByType(@Param('type') type: string) {
@@ -51,7 +60,8 @@ export class RolesController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBody({ type: [UpdateRoleDto] })
   @ApiOperation({ summary: 'Update role by id' })
   @ApiResponse({ status: 200, type: Role })
@@ -60,7 +70,8 @@ export class RolesController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Delete role by id' })
   @ApiResponse({ status: 200, type: Number })
   remove(@Param('id') id: string) {

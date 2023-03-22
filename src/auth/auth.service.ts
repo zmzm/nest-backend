@@ -1,5 +1,10 @@
 import * as bcrypt from 'bcrypt';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
@@ -13,8 +18,8 @@ export class AuthService {
   ) {}
 
   async login(createUserDto: CreateUserDto) {
-    const user = await this.userService.findByEmail(createUserDto.email);
-    return user;
+    const user = await this.validateUser(createUserDto);
+    return this.generateToken(user);
   }
 
   async registration(createUserDto: CreateUserDto) {
@@ -33,11 +38,27 @@ export class AuthService {
     return this.generateToken(newUser);
   }
 
-  generateToken(user: User) {
+  private generateToken(user: User) {
     const payload = { sub: user.id, email: user.email };
 
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  private async validateUser(userDto: CreateUserDto) {
+    const user = await this.userService.findByEmail(userDto.email);
+    const passwordsEqual = await bcrypt.compare(
+      userDto.password,
+      user.password
+    );
+
+    if (user && passwordsEqual) {
+      return user;
+    }
+
+    throw new UnauthorizedException({
+      message: 'Email or password is incorrect.',
+    });
   }
 }

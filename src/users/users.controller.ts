@@ -14,6 +14,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @ApiTags('Users endpoint')
 @Controller('users')
@@ -21,7 +23,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBody({ type: [CreateUserDto] })
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 200, type: User })
@@ -30,6 +33,8 @@ export class UsersController {
   }
 
   @Get()
+  @Roles('User')
+  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [User] })
   findAll() {
@@ -37,6 +42,8 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Roles('USER')
+  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResponse({ status: 200, type: User })
   findOne(@Param('id') id: string) {
@@ -45,7 +52,8 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiBody({ type: [UpdateUserDto] })
   @ApiOperation({ summary: 'Update user' })
   @ApiResponse({ status: 200, type: User })
@@ -54,7 +62,8 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Delete user' })
   @ApiResponse({ status: 200, type: Number })
   remove(@Param('id') id: string) {
