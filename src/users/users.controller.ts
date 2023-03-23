@@ -16,6 +16,7 @@ import { User } from './entities/user.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
+import { AddRoleDto } from './dto/add-role.dto';
 
 @ApiTags('Users endpoint')
 @Controller('users')
@@ -68,5 +69,14 @@ export class UsersController {
   @ApiResponse({ status: 200, type: Number })
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Post('/role')
+  @Roles('ADMIN')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @ApiOperation({ summary: 'Add user role' })
+  @ApiResponse({ status: 200, type: AddRoleDto })
+  addUserRole(@Body() addRoleDto: AddRoleDto) {
+    return this.addUserRole(addRoleDto);
   }
 }

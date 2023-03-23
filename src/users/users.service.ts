@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Role } from '../roles/entities/role.entity';
 import { RolesService } from '../roles/roles.service';
+import { AddRoleDto } from './dto/add-role.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -48,5 +49,16 @@ export class UsersService {
     await user.destroy();
 
     return id;
+  }
+
+  async addRole(addRoleDto: AddRoleDto) {
+    const user = await this.findOne(addRoleDto.userId);
+    const role = await this.roleService.findOneByType(addRoleDto.type);
+
+    if (user && role) {
+      user.$add('roles', role.id);
+    }
+
+    throw new HttpException('User or role not found.', HttpStatus.NOT_FOUND);
   }
 }

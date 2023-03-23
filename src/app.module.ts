@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { Dialect } from 'sequelize';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
@@ -16,7 +17,7 @@ import { AuthModule } from './auth/auth.module';
       envFilePath: '.env',
     }),
     SequelizeModule.forRoot({
-      dialect: 'postgres',
+      dialect: process.env.DB_DIALECT as Dialect,
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USER,
