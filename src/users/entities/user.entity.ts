@@ -52,7 +52,10 @@ export class User extends Model<User, UserCreationAttrs> {
     type: DataType.STRING,
     allowNull: true,
   })
-  @ApiProperty({ description: 'User ban reason', example: '' })
+  @ApiProperty({
+    description: 'User ban reason',
+    example: 'Disrespectful behaviour',
+  })
   banReason: string;
 
   @BelongsToMany(() => Role, () => UserRoles)
