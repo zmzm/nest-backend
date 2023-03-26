@@ -5,11 +5,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
     UsersModule,
     PassportModule,
     JwtModule.register({
