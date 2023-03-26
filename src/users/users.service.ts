@@ -20,6 +20,7 @@ export class UsersService {
     const user = await this.userModel.create(createUserDto);
     const role = await this.roleService.findOneByType('USER');
     await user.$set('roles', [role.id]);
+    user.roles = [role];
     return user;
   }
 
