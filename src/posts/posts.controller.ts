@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PostsService } from './posts.service';
@@ -16,6 +18,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { Roles } from '../auth/roles.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('posts')
 export class PostsController {
@@ -24,10 +27,14 @@ export class PostsController {
   @Post()
   @Roles('ADMIN', 'USER')
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('image'))
   @ApiBody({ type: [CreatePostDto] })
   @ApiOperation({ summary: 'Create post' })
   @ApiResponse({ status: 200, type: PostModel })
-  create(@Body() createPostDto: CreatePostDto, image: any) {
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @UploadedFile() image: Express.Multer.File
+  ) {
     return this.postsService.create(createPostDto, image);
   }
 

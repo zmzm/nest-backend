@@ -49,7 +49,6 @@ export class UsersController {
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResponse({ status: 200, type: User })
   findOne(@Param('id') id: string) {
-    console.log(id);
     return this.usersService.findOne(+id);
   }
 

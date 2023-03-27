@@ -10,6 +10,7 @@ import { UserRoles } from './roles/entities/userRoles.entity';
 import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { Post } from './posts/entities/post.entity';
+import { FilesModule } from './files/files.module';
 
 @Module({
   controllers: [],
@@ -33,6 +34,7 @@ import { Post } from './posts/entities/post.entity';
     RolesModule,
     AuthModule,
     PostsModule,
+    FilesModule,
   ],
 })
 export class AppModule {}
