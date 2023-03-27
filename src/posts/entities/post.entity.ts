@@ -12,6 +12,7 @@ import { User } from '../../users/entities/user.entity';
 interface PostCreationAttrs {
   title: string;
   content: string;
+  image: string;
 }
 
 @Table({ tableName: 'posts' })
@@ -40,6 +41,13 @@ export class Post extends Model<Post, PostCreationAttrs> {
   })
   @ApiProperty({ description: 'Post content', example: 'Post content' })
   content: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  @ApiProperty({ description: 'Post image', example: '' })
+  image: string;
 
   @BelongsTo(() => User)
   author: User;

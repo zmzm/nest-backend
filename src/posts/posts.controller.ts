@@ -27,8 +27,8 @@ export class PostsController {
   @ApiBody({ type: [CreatePostDto] })
   @ApiOperation({ summary: 'Create post' })
   @ApiResponse({ status: 200, type: PostModel })
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  create(@Body() createPostDto: CreatePostDto, image: any) {
+    return this.postsService.create(createPostDto, image);
   }
 
   @Get()

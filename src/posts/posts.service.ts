@@ -11,8 +11,8 @@ export class PostsService {
     private readonly postModel: typeof Post
   ) {}
 
-  create(createPostDto: CreatePostDto) {
-    return this.postModel.create(createPostDto);
+  create(createPostDto: CreatePostDto, image: any) {
+    return this.postModel.create({ ...createPostDto, image });
   }
 
   findAll() {
