@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 import { Dialect } from 'sequelize';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
@@ -18,6 +20,9 @@ import { FilesModule } from './files/files.module';
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, 'static'),
     }),
     SequelizeModule.forRoot({
       dialect: process.env.DB_DIALECT as Dialect,
