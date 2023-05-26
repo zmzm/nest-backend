@@ -33,8 +33,8 @@ export class RolesController {
   }
 
   @Get()
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get all roles' })
   @ApiResponse({ status: 200, type: [Role] })
   findAll() {
@@ -42,8 +42,8 @@ export class RolesController {
   }
 
   @Get(':id')
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get role by id' })
   @ApiResponse({ status: 200, type: Role })
   findOneById(@Param('id') id: string) {
@@ -51,8 +51,8 @@ export class RolesController {
   }
 
   @Get(':type')
-  @Roles('USER')
-  @UseGuards(RolesGuard)
+  @Roles('ADMIN', 'USER')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @ApiOperation({ summary: 'Get role by type' })
   @ApiResponse({ status: 200, type: Role })
   findOneByType(@Param('type') type: string) {
